@@ -49,14 +49,12 @@ public final class Server {
                          p.addLast(sslCtx.newHandler(ch.alloc()));
                      }
                      p.addLast(
-                             //new LoggingHandler(LogLevel.TRACE),
                              new ObjectEncoder(),
                              new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
                              new ServerHandler());
                  }
              });
 
-            // Bind and start to accept incoming connections.
             b.bind(PORT).sync().channel().closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();
