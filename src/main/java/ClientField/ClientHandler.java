@@ -11,23 +11,17 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
-/**
- * Handler implementation for the object echo client.  It initiates the
- * ping-pong traffic between the object echo client and server by sending the
- * first message to the server.
- */
-public class ClientHandler extends ChannelInboundHandlerAdapter {
-    /**
-     * Creates a client-side handler.
-     */
 
-    @Override
+public class ClientHandler extends ChannelInboundHandlerAdapter {
+    
+
+   
     public void channelRegistered(ChannelHandlerContext ctx) throws RuntimeException {
         RSA.init();
     }
 
 
-    @Override
+   
     public void channelActive(ChannelHandlerContext ctx) {
         ArrayList<Object> data = new ArrayList<Object>();
         data.add(RSA.getN());
@@ -42,7 +36,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
     }
 
 
-    @Override
+    
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         if(msg instanceof BigInteger){
             BigInteger msg1 = (BigInteger) msg;
@@ -60,12 +54,12 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         ctx.write(wrapper);
     }
 
-    @Override
+   
     public void channelReadComplete(ChannelHandlerContext ctx) {
         ctx.flush();
     }
 
-    @Override
+   
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         cause.printStackTrace();
         ctx.close();
