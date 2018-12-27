@@ -32,7 +32,7 @@ public final class Client {
     static final int SIZE = Integer.parseInt(System.getProperty("size", "256"));
 
     public static void main(String[] args) throws Exception {
-        // Configure SSL.
+        
         final SslContext sslCtx;
         if (SSL) {
             sslCtx = SslContextBuilder.forClient()
@@ -47,24 +47,21 @@ public final class Client {
             b.group(group)
              .channel(NioSocketChannel.class)
              .handler(new ChannelInitializer<SocketChannel>() {
-                 @Override
+                 
                  public void initChannel(SocketChannel ch) throws Exception {
                      ChannelPipeline p = ch.pipeline();
                      if (sslCtx != null) {
                          p.addLast(sslCtx.newHandler(ch.alloc(), HOST, PORT));
                      }
                      p.addLast(
-                             //new LoggingHandler(LogLevel.INFO),
+                             
                              new ObjectEncoder(),
                              new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
                              new ClientHandler(),
-                            // new StringEncoder(),
-                             //new StringDecoder(),
                              new DelimiterBasedFrameDecoder(1000, Delimiters.lineDelimiter()));
                  }
              });
 
-            // Start the connection attempt.
            ChannelFuture ch=  b.connect(HOST, PORT).sync();
           ch.channel().closeFuture().sync();
         } finally {
